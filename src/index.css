@@ -2,41 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Nourish Naturally - Natural Medicine & Nutrition Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 120 20% 98%;
+    --foreground: 120 10% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 120 30% 96%;
+    --card-foreground: 120 10% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 120 30% 98%;
+    --popover-foreground: 120 10% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 120 20% 98%;
+    --primary-hover: 142 76% 32%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 120 20% 92%;
+    --secondary-foreground: 120 10% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 120 15% 94%;
+    --muted-foreground: 120 8% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 95 85% 85%;
+    --accent-foreground: 120 10% 20%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --success: 142 76% 36%;
+    --success-foreground: 120 20% 98%;
 
-    --radius: 0.5rem;
+    --warning: 45 93% 47%;
+    --warning-foreground: 0 0% 98%;
+
+    --border: 120 15% 88%;
+    --input: 120 15% 92%;
+    --ring: 142 76% 36%;
+
+    --wellness-mint: 152 65% 75%;
+    --wellness-sage: 120 25% 70%;
+    --wellness-earth: 25 45% 65%;
+    --wellness-leaf: 95 85% 45%;
+
+    --gradient-wellness: linear-gradient(135deg, hsl(142 76% 36%), hsl(152 65% 45%));
+    --gradient-earth: linear-gradient(135deg, hsl(25 45% 65%), hsl(95 85% 75%));
+    --gradient-subtle: linear-gradient(180deg, hsl(120 30% 98%), hsl(120 20% 96%));
+
+    --shadow-wellness: 0 10px 30px -5px hsl(142 76% 36% / 0.2);
+    --shadow-soft: 0 4px 20px -2px hsl(120 10% 15% / 0.1);
+    --shadow-card: 0 2px 10px -1px hsl(120 10% 15% / 0.08);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +118,110 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  /* Wellness Animation Classes */
+  .animate-wellness-fade-in {
+    animation: wellness-fade-in 0.6s ease-out forwards;
+  }
+
+  .animate-wellness-slide-up {
+    animation: wellness-slide-up 0.5s ease-out forwards;
+  }
+
+  .animate-wellness-bounce {
+    animation: wellness-bounce 0.8s ease-in-out;
+  }
+
+  .animate-wellness-pulse {
+    animation: wellness-pulse 2s infinite;
+  }
+
+  /* Gradient Backgrounds */
+  .bg-gradient-wellness {
+    background: var(--gradient-wellness);
+  }
+
+  .bg-gradient-earth {
+    background: var(--gradient-earth);
+  }
+
+  .bg-gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+
+  /* Wellness Shadows */
+  .shadow-wellness {
+    box-shadow: var(--shadow-wellness);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Card Variants */
+  .card-wellness {
+    @apply bg-card border border-border rounded-xl shadow-card backdrop-blur-sm;
+  }
+
+  .card-feature {
+    @apply bg-gradient-subtle border border-border/50 rounded-xl shadow-soft hover:shadow-wellness transition-all duration-300;
+  }
+
+  /* Button Hover Effects */
+  .btn-wellness-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-wellness;
+  }
+}
+
+@keyframes wellness-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wellness-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wellness-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes wellness-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
   }
 }
