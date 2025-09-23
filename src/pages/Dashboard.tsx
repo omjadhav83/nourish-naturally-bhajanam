@@ -123,6 +123,8 @@ const Dashboard = () => {
         user={user}
         onSignOut={handleSignOut}
         onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        onProfileClick={() => setActiveView('profile')}
+        onSettingsClick={() => setActiveView('profile')}
       />
 
       <div className="flex">

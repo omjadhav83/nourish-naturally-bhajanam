@@ -1,8 +1,45 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Leaf, Heart, Users, Shield } from 'lucide-react';
+import { Leaf, Heart, Users, Shield, ArrowRight, User, Settings } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 const Index = () => {
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-wellness flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-wellness-pulse bg-primary-foreground/10 p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center">
+            <div className="w-8 h-8 bg-primary-foreground rounded-full animate-wellness-bounce"></div>
+          </div>
+          <p className="text-primary-foreground/80">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-wellness">
       <div className="flex min-h-screen items-center justify-center p-4">
@@ -44,23 +81,76 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/auth">
+          {user ? (
+            // Logged in user - show dashboard access
+            <div className="space-y-4">
+              <p className="text-primary-foreground/90 text-lg">
+                Welcome back! Continue your wellness journey.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/dashboard">
+                  <Button 
+                    size="lg" 
+                    className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 btn-wellness-hover text-lg px-8 py-6"
+                  >
+                    <ArrowRight className="mr-2 h-5 w-5" />
+                    Go to Dashboard
+                  </Button>
+                </Link>
+                <div className="flex gap-2">
+                  <Link to="/dashboard">
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 px-6 py-6"
+                    >
+                      <User className="mr-2 h-5 w-5" />
+                      Profile
+                    </Button>
+                  </Link>
+                  <Link to="/dashboard">
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 px-6 py-6"
+                    >
+                      <Settings className="mr-2 h-5 w-5" />
+                      Settings
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Not logged in - show sign up
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/auth">
+                <Button 
+                  size="lg" 
+                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 btn-wellness-hover text-lg px-8 py-6"
+                >
+                  Start Your Wellness Journey
+                </Button>
+              </Link>
               <Button 
-                size="lg" 
-                className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 btn-wellness-hover text-lg px-8 py-6"
+                variant="outline" 
+                size="lg"
+                className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-6"
               >
-                Start Your Wellness Journey
+                Learn More
               </Button>
-            </Link>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-6"
-            >
-              Learn More
-            </Button>
-          </div>
+            </div>
+          )}
+
+          {/* Quick access instructions for logged-in users */}
+          {user && (
+            <div className="mt-8 p-4 bg-primary-foreground/10 rounded-lg backdrop-blur-sm">
+              <p className="text-sm text-primary-foreground/80 text-center">
+                💡 <strong>Quick Access:</strong> Use the user menu (top-right avatar) in dashboard to access Profile & Settings, 
+                or click "Profile" in the sidebar navigation.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

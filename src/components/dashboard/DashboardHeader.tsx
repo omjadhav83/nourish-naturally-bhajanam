@@ -9,9 +9,11 @@ interface DashboardHeaderProps {
   user: SupabaseUser;
   onSignOut: () => void;
   onMenuClick: () => void;
+  onProfileClick: () => void;
+  onSettingsClick: () => void;
 }
 
-export const DashboardHeader = ({ user, onSignOut, onMenuClick }: DashboardHeaderProps) => {
+export const DashboardHeader = ({ user, onSignOut, onMenuClick, onProfileClick, onSettingsClick }: DashboardHeaderProps) => {
   const getUserInitials = (email: string) => {
     return email.slice(0, 2).toUpperCase();
   };
@@ -74,11 +76,11 @@ export const DashboardHeader = ({ user, onSignOut, onMenuClick }: DashboardHeade
                   {user.email}
                 </p>
               </div>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={onProfileClick} className="cursor-pointer">
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={onSettingsClick} className="cursor-pointer">
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
