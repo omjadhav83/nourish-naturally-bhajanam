@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { LanguageToggle } from '@/components/ui/language-toggle';
 import { Bell, Menu, LogOut, Settings, User } from 'lucide-react';
 import { Leaf } from 'lucide-react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
@@ -49,6 +51,12 @@ export const DashboardHeader = ({ user, onSignOut, onMenuClick, onProfileClick, 
 
         {/* Right side - Notifications and User Menu */}
         <div className="flex items-center gap-3">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+          
+          {/* Language Toggle */}
+          <LanguageToggle />
+          
           {/* Notifications */}
           <Button variant="ghost" size="sm" className="relative">
             <Bell className="h-5 w-5" />

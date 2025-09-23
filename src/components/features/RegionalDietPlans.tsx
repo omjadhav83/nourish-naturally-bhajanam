@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Star, Clock, Users } from 'lucide-react';
+import { MapPin, Star, Clock, Users, Navigation, Loader2 } from 'lucide-react';
+import { useLocation } from '@/hooks/useLocation';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const regions = [
   {
@@ -63,16 +65,116 @@ const regions = [
 
 export const RegionalDietPlans = () => {
   const [selectedRegion, setSelectedRegion] = useState<any>(null);
+  const { location, loading: locationLoading, error: locationError, requestLocation } = useLocation();
+  const { t } = useLanguage();
 
   return (
     <div className="space-y-6 animate-wellness-fade-in">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Regional Diet Plans</h1>
+        <h1 className="text-3xl font-bold text-foreground">{t('nav.regionalDiet')}</h1>
         <p className="text-muted-foreground mt-2">
-          Explore traditional cuisines from different states of India with their health benefits
+          {t('regional.subtitle') || 'Explore traditional cuisines from different states of India with their health benefits'}
         </p>
       </div>
 
+      {/* Location Section */}
+      <Card className="card-wellness">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Navigation className="h-5 w-5 text-primary" />
+            {t('regional.yourLocation') || 'Your Location'}
+          </CardTitle>
+          <CardDescription>
+            {t('regional.locationDesc') || 'Get personalized regional diet recommendations based on your location'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {!location && !locationLoading && (
+            <div className="text-center py-4">
+              <Button 
+                onClick={requestLocation} 
+                className="btn-wellness-hover"
+                disabled={locationLoading}
+              >
+                <MapPin className="h-4 w-4 mr-2" />
+                {t('regional.detectLocation') || 'Detect My Location'}
+              </Button>
+            </div>
+          )}
+          
+          {locationLoading && (
+            <div className="text-center py-4">
+              <div className="flex items-center justify-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm text-muted-foreground">
+                  {t('regional.detectingLocation') || 'Detecting your location...'}
+                </span>
+              </div>
+            </div>
+          )}
+          
+          {location && (
+            <div className="bg-primary/5 p-4 rounded-lg">
+              <div className="flex items-start gap-3">
+                <MapPin className="h-5 w-5 text-primary mt-0.5" />
+                <div>
+                  <p className="font-medium text-foreground">
+                    {location.city && location.state 
+                      ? `${location.city}, ${location.state}` 
+                      : location.region || 'Unknown Location'}
+                  </p>
+                  {location.country && (
+                    <p className="text-sm text-muted-foreground">{location.country}</p>
+                  )}
+                  <div className="mt-2">
+                    <Badge variant="secondary" className="text-xs">
+                      {t('regional.recommendedRegion') || 'Recommended Region'}: {location.state || location.region}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="mt-3"
+                onClick={() => {
+                  const matchingRegion = regions.find(region => 
+                    location.state?.toLowerCase().includes(region.name.toLowerCase()) ||
+                    region.name.toLowerCase().includes(location.state?.toLowerCase() || '')
+                  );
+                  if (matchingRegion) {
+                    setSelectedRegion(matchingRegion);
+                  }
+                }}
+              >
+                {t('regional.viewLocalCuisine') || 'View Local Cuisine'}
+              </Button>
+            </div>
+          )}
+          
+          {locationError && (
+            <div className="bg-destructive/10 p-4 rounded-lg">
+              <div className="flex items-start gap-3">
+                <MapPin className="h-5 w-5 text-destructive mt-0.5" />
+                <div>
+                  <p className="font-medium text-destructive">
+                    {t('regional.locationError') || 'Location Error'}
+                  </p>
+                  <p className="text-sm text-destructive/80">{locationError.message}</p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-2"
+                    onClick={requestLocation}
+                  >
+                    {t('regional.tryAgain') || 'Try Again'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Region Selection */}
         <div className="lg:col-span-2">

@@ -76,7 +76,18 @@ const translations = {
     'community.share': 'Share with Community',
     'community.stats': 'Community Stats',
     'community.trending': 'Trending Topics',
-    'community.contributors': 'Top Contributors'
+    'community.contributors': 'Top Contributors',
+    
+    // Regional Diet
+    'regional.subtitle': 'Explore traditional cuisines from different states of India with their health benefits',
+    'regional.yourLocation': 'Your Location',
+    'regional.locationDesc': 'Get personalized regional diet recommendations based on your location',
+    'regional.detectLocation': 'Detect My Location',
+    'regional.detectingLocation': 'Detecting your location...',
+    'regional.recommendedRegion': 'Recommended Region',
+    'regional.viewLocalCuisine': 'View Local Cuisine',
+    'regional.locationError': 'Location Error',
+    'regional.tryAgain': 'Try Again'
   },
   
   hi: {
@@ -146,7 +157,18 @@ const translations = {
     'community.share': 'समुदाय के साथ साझा करें',
     'community.stats': 'समुदाय आंकड़े',
     'community.trending': 'ट्रेंडिंग विषय',
-    'community.contributors': 'शीर्ष योगदानकर्ता'
+    'community.contributors': 'शीर्ष योगदानकर्ता',
+    
+    // Regional Diet
+    'regional.subtitle': 'भारत के विभिन्न राज्यों के पारंपरिक व्यंजनों और उनके स्वास्थ्य लाभों का अन्वेषण करें',
+    'regional.yourLocation': 'आपका स्थान',
+    'regional.locationDesc': 'अपने स्थान के आधार पर व्यक्तिगत क्षेत्रीय आहार सिफारिशें प्राप्त करें',
+    'regional.detectLocation': 'मेरा स्थान खोजें',
+    'regional.detectingLocation': 'आपका स्थान खोजा जा रहा है...',
+    'regional.recommendedRegion': 'अनुशंसित क्षेत्र',
+    'regional.viewLocalCuisine': 'स्थानीय व्यंजन देखें',
+    'regional.locationError': 'स्थान त्रुटि',
+    'regional.tryAgain': 'पुनः प्रयास करें'
   },
   
   mr: {
@@ -175,7 +197,11 @@ const translations = {
     'profile.fullName': 'पूर्ण नाव',
     'profile.email': 'ईमेल',
     'profile.phone': 'फोन नंबर',
-    'profile.address': 'पत्ता'
+    'profile.address': 'पत्ता',
+    
+    // Regional Diet (abbreviated)
+    'regional.yourLocation': 'तुमचे स्थान',
+    'regional.detectLocation': 'माझे स्थान शोधा'
   },
   
   gu: {
@@ -200,7 +226,11 @@ const translations = {
     // Profile (abbreviated)
     'profile.title': 'વપરાશકર્તા પ્રોફાઇલ',
     'profile.fullName': 'પૂરું નામ',
-    'profile.email': 'ઈમેઇલ'
+    'profile.email': 'ઈમેઇલ',
+    
+    // Regional Diet (abbreviated)
+    'regional.yourLocation': 'તમારું સ્થાન',
+    'regional.detectLocation': 'મારું સ્થાન શોધો'
   },
   
   te: {
@@ -223,7 +253,11 @@ const translations = {
     
     // Profile (abbreviated)
     'profile.title': 'వినియోగదారు ప్రొఫైల్',
-    'profile.fullName': 'పూర్తి పేరు'
+    'profile.fullName': 'పూర్తి పేరు',
+    
+    // Regional Diet (abbreviated)
+    'regional.yourLocation': 'మీ స్థానం',
+    'regional.detectLocation': 'నా స్థానాన్ని గుర్తించండి'
   },
   
   bn: {
@@ -246,7 +280,11 @@ const translations = {
     
     // Profile (abbreviated)
     'profile.title': 'ব্যবহারকারী প্রোফাইল',
-    'profile.fullName': 'পূর্ণ নাম'
+    'profile.fullName': 'পূর্ণ নাম',
+    
+    // Regional Diet (abbreviated)
+    'regional.yourLocation': 'আপনার অবস্থান',
+    'regional.detectLocation': 'আমার অবস্থান খুঁজুন'
   }
 };
 
