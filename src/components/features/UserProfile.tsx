@@ -9,7 +9,9 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { User, Settings, Globe, Shield, Bell, Heart, Award, TrendingUp } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { User, Settings, Globe, Shield, Bell, Heart, Award, TrendingUp, Phone, MapPin, Pill } from 'lucide-react';
+import { useLanguage, languages } from '@/contexts/LanguageContext';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 interface UserProfileProps {
@@ -17,9 +19,13 @@ interface UserProfileProps {
 }
 
 export const UserProfile = ({ user }: UserProfileProps) => {
+  const { t, language, setLanguage } = useLanguage();
+  
   const [profileData, setProfileData] = useState({
     fullName: user?.user_metadata?.full_name || '',
     email: user?.email || '',
+    phone: '',
+    address: '',
     age: '',
     gender: '',
     height: '',
@@ -29,7 +35,10 @@ export const UserProfile = ({ user }: UserProfileProps) => {
     dietaryPreferences: '',
     allergies: '',
     medicalConditions: '',
-    preferredLanguage: 'english'
+    medications: '',
+    emergencyContact: '',
+    bloodType: '',
+    insuranceInfo: ''
   });
 
   const [notifications, setNotifications] = useState({
@@ -63,9 +72,9 @@ export const UserProfile = ({ user }: UserProfileProps) => {
   return (
     <div className="space-y-6 animate-wellness-fade-in">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">User Profile</h1>
+        <h1 className="text-3xl font-bold text-foreground">{t('profile.title')}</h1>
         <p className="text-muted-foreground mt-2">
-          Manage your account settings and wellness preferences
+          {t('profile.subtitle')}
         </p>
       </div>
 
@@ -108,11 +117,12 @@ export const UserProfile = ({ user }: UserProfileProps) => {
         {/* Main Content */}
         <div className="lg:col-span-3">
           <Tabs defaultValue="personal" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="personal">Personal Info</TabsTrigger>
-              <TabsTrigger value="health">Health Profile</TabsTrigger>
-              <TabsTrigger value="preferences">Preferences</TabsTrigger>
-              <TabsTrigger value="achievements">Achievements</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="personal">{t('profile.personalInfo')}</TabsTrigger>
+              <TabsTrigger value="health">{t('profile.healthProfile')}</TabsTrigger>
+              <TabsTrigger value="medical">Medical Info</TabsTrigger>
+              <TabsTrigger value="settings">{t('settings.title')}</TabsTrigger>
+              <TabsTrigger value="achievements">{t('profile.achievements')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="personal" className="space-y-4">
@@ -120,7 +130,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <User className="h-5 w-5" />
-                    Personal Information
+                    {t('profile.personalInfo')}
                   </CardTitle>
                   <CardDescription>
                     Update your basic profile information
@@ -129,7 +139,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="fullName">Full Name</Label>
+                      <Label htmlFor="fullName">{t('profile.fullName')}</Label>
                       <Input
                         id="fullName"
                         value={profileData.fullName}
@@ -137,7 +147,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">{t('profile.email')}</Label>
                       <Input
                         id="email"
                         type="email"
@@ -147,7 +157,17 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="age">Age</Label>
+                      <Label htmlFor="phone">{t('profile.phone')}</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="+91 9876543210"
+                        value={profileData.phone}
+                        onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="age">{t('profile.age')}</Label>
                       <Input
                         id="age"
                         type="number"
@@ -157,7 +177,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="gender">Gender</Label>
+                      <Label htmlFor="gender">{t('profile.gender')}</Label>
                       <Select value={profileData.gender} onValueChange={(value) => setProfileData({...profileData, gender: value})}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select gender" />
@@ -169,6 +189,45 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="bloodType">Blood Type</Label>
+                      <Select value={profileData.bloodType} onValueChange={(value) => setProfileData({...profileData, bloodType: value})}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select blood type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="A+">A+</SelectItem>
+                          <SelectItem value="A-">A-</SelectItem>
+                          <SelectItem value="B+">B+</SelectItem>
+                          <SelectItem value="B-">B-</SelectItem>
+                          <SelectItem value="AB+">AB+</SelectItem>
+                          <SelectItem value="AB-">AB-</SelectItem>
+                          <SelectItem value="O+">O+</SelectItem>
+                          <SelectItem value="O-">O-</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="address">{t('profile.address')}</Label>
+                    <Textarea
+                      id="address"
+                      placeholder="Complete address with pincode"
+                      value={profileData.address}
+                      onChange={(e) => setProfileData({...profileData, address: e.target.value})}
+                      rows={2}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="emergencyContact">Emergency Contact</Label>
+                    <Input
+                      id="emergencyContact"
+                      placeholder="Name and phone number"
+                      value={profileData.emergencyContact}
+                      onChange={(e) => setProfileData({...profileData, emergencyContact: e.target.value})}
+                    />
                   </div>
                   <Button className="btn-wellness-hover">
                     Save Changes
@@ -182,7 +241,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Heart className="h-5 w-5" />
-                    Health Profile
+                    {t('profile.healthProfile')}
                   </CardTitle>
                   <CardDescription>
                     Your health information for personalized recommendations
@@ -191,7 +250,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="height">Height (cm)</Label>
+                      <Label htmlFor="height">{t('profile.height')}</Label>
                       <Input
                         id="height"
                         type="number"
@@ -201,7 +260,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="weight">Weight (kg)</Label>
+                      <Label htmlFor="weight">{t('profile.weight')}</Label>
                       <Input
                         id="weight"
                         type="number"
@@ -213,7 +272,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="activity">Activity Level</Label>
+                    <Label htmlFor="activity">{t('profile.activityLevel')}</Label>
                     <Select value={profileData.activityLevel} onValueChange={(value) => setProfileData({...profileData, activityLevel: value})}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select activity level" />
@@ -228,7 +287,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="goals">Health Goals</Label>
+                    <Label htmlFor="goals">{t('profile.healthGoals')}</Label>
                     <Textarea
                       id="goals"
                       placeholder="e.g., weight loss, muscle gain, better energy..."
@@ -238,12 +297,12 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="conditions">Medical Conditions</Label>
+                    <Label htmlFor="dietary">Dietary Preferences</Label>
                     <Textarea
-                      id="conditions"
-                      placeholder="e.g., diabetes, hypertension, allergies..."
-                      value={profileData.medicalConditions}
-                      onChange={(e) => setProfileData({...profileData, medicalConditions: e.target.value})}
+                      id="dietary"
+                      placeholder="e.g., vegetarian, vegan, gluten-free..."
+                      value={profileData.dietaryPreferences}
+                      onChange={(e) => setProfileData({...profileData, dietaryPreferences: e.target.value})}
                     />
                   </div>
 
@@ -254,35 +313,99 @@ export const UserProfile = ({ user }: UserProfileProps) => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="preferences" className="space-y-4">
+            <TabsContent value="medical" className="space-y-4">
+              <Card className="card-wellness">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Pill className="h-5 w-5" />
+                    Medical Information
+                  </CardTitle>
+                  <CardDescription>
+                    Important medical details for personalized care
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="conditions">{t('profile.medicalConditions')}</Label>
+                    <Textarea
+                      id="conditions"
+                      placeholder="e.g., diabetes, hypertension, heart disease, thyroid..."
+                      value={profileData.medicalConditions}
+                      onChange={(e) => setProfileData({...profileData, medicalConditions: e.target.value})}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="allergies">{t('profile.allergies')}</Label>
+                    <Textarea
+                      id="allergies"
+                      placeholder="e.g., peanuts, dairy, shellfish, gluten..."
+                      value={profileData.allergies}
+                      onChange={(e) => setProfileData({...profileData, allergies: e.target.value})}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="medications">{t('profile.medications')}</Label>
+                    <Textarea
+                      id="medications"
+                      placeholder="e.g., metformin, aspirin, vitamin D..."
+                      value={profileData.medications}
+                      onChange={(e) => setProfileData({...profileData, medications: e.target.value})}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="insurance">Insurance Information</Label>
+                    <Input
+                      id="insurance"
+                      placeholder="Insurance provider and policy number"
+                      value={profileData.insuranceInfo}
+                      onChange={(e) => setProfileData({...profileData, insuranceInfo: e.target.value})}
+                    />
+                  </div>
+
+                  <Button className="btn-wellness-hover">
+                    Update Medical Information
+                  </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="settings" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card className="card-wellness">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Globe className="h-5 w-5" />
-                      Language & Region
+                      {t('settings.language')}
                     </CardTitle>
+                    <CardDescription>
+                      Change your preferred language
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="language">Preferred Language</Label>
-                      <Select value={profileData.preferredLanguage} onValueChange={(value) => setProfileData({...profileData, preferredLanguage: value})}>
+                      <Label htmlFor="language">{t('settings.selectLanguage')}</Label>
+                      <Select value={language} onValueChange={setLanguage}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="english">English</SelectItem>
-                          <SelectItem value="hindi">हिंदी (Hindi)</SelectItem>
-                          <SelectItem value="marathi">मराठी (Marathi)</SelectItem>
-                          <SelectItem value="gujarati">ગુજરાતી (Gujarati)</SelectItem>
-                          <SelectItem value="tamil">தமிழ் (Tamil)</SelectItem>
-                          <SelectItem value="bengali">বাংলা (Bengali)</SelectItem>
+                          {languages.map((lang) => (
+                            <SelectItem key={lang.code} value={lang.code}>
+                              {lang.nativeName} ({lang.name})
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button variant="outline" className="w-full">
-                      Save Language
-                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      Language changes will be applied immediately across the entire website.
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -290,8 +413,11 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Bell className="h-5 w-5" />
-                      Notifications
+                      {t('settings.notifications')}
                     </CardTitle>
+                    <CardDescription>
+                      Manage your notification preferences
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
@@ -300,17 +426,63 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                           <span className="text-sm">
                             {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                           </span>
-                          <input
-                            type="checkbox"
+                          <Switch
                             checked={value}
-                            onChange={(e) => setNotifications({...notifications, [key]: e.target.checked})}
-                            className="rounded"
+                            onCheckedChange={(checked) => setNotifications({...notifications, [key]: checked})}
                           />
                         </div>
                       ))}
                     </div>
                     <Button variant="outline" className="w-full">
-                      Save Preferences
+                      {t('common.save')} {t('settings.notifications')}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="card-wellness">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Shield className="h-5 w-5" />
+                      {t('settings.privacy')}
+                    </CardTitle>
+                    <CardDescription>
+                      Control your privacy settings
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Profile Visibility</span>
+                        <Switch defaultChecked />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Data Analytics</span>
+                        <Switch defaultChecked />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Marketing Communications</span>
+                        <Switch />
+                      </div>
+                    </div>
+                    <Button variant="outline" className="w-full">
+                      {t('common.save')} Privacy Settings
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="card-wellness">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-destructive">Danger Zone</CardTitle>
+                    <CardDescription>
+                      Irreversible and destructive actions
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Button variant="outline" className="w-full text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
+                      Export Data
+                    </Button>
+                    <Button variant="outline" className="w-full text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
+                      Delete Account
                     </Button>
                   </CardContent>
                 </Card>
